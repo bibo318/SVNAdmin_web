@@ -1,10 +1,10 @@
 <?php
 /*
- * @Author: bibo318
- * 
- * @LastEditors: bibo318
- * 
- * @Description: github: /bibo318
+ *@Author: bibo318
+ *
+ *@LastEditors: bibo318
+ *
+ *@Description: github: /bibo318
  */
 
 namespace app\controller;
@@ -14,9 +14,9 @@ use app\service\Common as ServiceCommon;
 class Common extends Base
 {
     /**
-     * 服务层对象
+     *Service layer object
      *
-     * @var object
+     *@var object
      */
     private $ServiceCommon;
 
@@ -28,7 +28,7 @@ class Common extends Base
     }
 
     /**
-     * 登录
+     *Log in
      */
     public function Login()
     {
@@ -37,11 +37,11 @@ class Common extends Base
     }
 
     /**
-     * 注销
-     * 
-     * 注销操作为将用户尚未过期的token加入所谓黑名单
-     * 每次注销触发主动扫描黑名单 将名单中过期的token删除
-     * 目的：实现用户注销后尚未过期的token无法继续使用
+     *log out
+     *
+     *The logout operation is to add the user's token that has not expired to the so-called blacklist
+     *Each logout triggers an active scan of the blacklist and deletes expired tokens in the list
+     *Purpose: To realize that the token that has not expired after the user logs out cannot continue to be used
      */
     public function Logout()
     {
@@ -50,7 +50,7 @@ class Common extends Base
     }
 
     /**
-     * lấy mã xác minh
+     *get verification code
      */
     public function GetVerifyCode()
     {

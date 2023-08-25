@@ -1,11 +1,11 @@
 <?php
 
 /*
- * @Author: www.witersen.com
- * 
- * @LastEditors: bibo318
- * 
- * @Description: github: /bibo318
+ *@Author: www.witersen.com
+ *
+ *@LastEditors: bibo318
+ *
+ *@Description: github: /bibo318
  */
 
 namespace Witersen;
@@ -14,101 +14,101 @@ class Upload
 {
 
     /**
-     * 文件分片的临时保存目录
+     *Temporary storage directory for file fragmentation
      *
-     * @var string
+     *@var string
      */
     private $nameDirTempSave = '';
 
     /**
-     * 最终文件的正式保存目录
+     *The official storage directory of the final document
      *
-     * @var string
+     *@var string
      */
     private $nameDirSave = '';
 
     /**
-     * 文件名
+     *file name
      *
-     * @var string
+     *@var string
      */
     private $nameFileSave = '';
 
     /**
-     * 完整文件的md5
+     *md5 of the complete file
      *
-     * @var string
+     *@var string
      */
     private $nameFileMd5 = '';
 
     /**
-     * php临时文件路径
+     *php temporary file path
      *
-     * @var string
+     *@var string
      */
     private $nameFileCurrent = '';
 
     /**
-     * 第几个文件分片
+     *The first few file fragments
      *
-     * @var integer
+     *@var integer
      */
     private $numBlobCurrent = 0;
 
     /**
-     * 文件分片总数
+     *Total number of file fragments
      *
-     * @var integer
+     *@var integer
      */
     private $numBlobTotal = 0;
 
     /**
-     * 已经上传完成的文件分片数量
+     *The number of file fragments that have been uploaded
      *
-     * @var integer
+     *@var integer
      */
     private $completeCount = 0;
 
     /**
-     * 是否合并完成
+     *Whether the merge is complete
      *
-     * @var boolean
+     *@var boolean
      */
     private $complete = false;
 
     /**
-     * 工作状态
+     *Working status
      *
-     * @var boolean
+     *@var boolean
      */
     private $status = true;
 
     /**
-     * 提示信息
+     *Prompt information
      *
-     * @var string
+     *@var string
      */
     private $message = '上传完成';
 
     /**
-     * 文件分片合并后是否立即删除
+     *Whether to delete files immediately after merging
      *
-     * @var boolean
+     *@var boolean
      */
     private $deleteOnMerge = true;
 
     /**
-     * Upload
+     *Upload
      *
-     * @param string $nameDirTempSave   Thư mục lưu trữ tạm thời cho các đoạn tập tin
-     * @param string $nameDirSave       Thư mục lưu trữ chính thức cho các tài liệu cuối cùng
-     * @param string $nameFileSave      Tên tệp chính thức của tài liệu cuối cùng
-     * @param string $nameFileMd5       Giá trị md5 của file cần upload
-     * @param string $nameFileCurrent   Đường dẫn của phân đoạn tập tin hiện tại
-     * @param integer $numBlobCurrent   Đoạn tập tin hiện tại là gì
-     * @param integer $numBlobTotal     Có một số đoạn tập tin
-     * @param integer $deleteOnMerge    Có xóa tất cả các đoạn sau khi quá trình hợp nhất tệp hoàn tất hay không
-     * @return void
+     *@param string $nameDirTempSave Temporary storage directory for file fragments
+     *@param string $nameDirSave Official archive for final documents
+     *@param string $nameFileSave The official file name of the final document
+     *@param string $nameFileMd5 The md5 value of the file to upload
+     *@param string $nameFileCurrent Path of current file segment
+*@param integer $numBlobCurrent What is the current file segment
+     *@param integer $numBlobTotal There are several file fragments
+     *@param integer $deleteOnMerge Whether to delete all fragments after file merge is complete
+     *@return void
      */
     public function __construct($nameDirTempSave, $nameDirSave, $nameFileSave, $nameFileMd5, $nameFileCurrent, $numBlobCurrent, $numBlobTotal, $deleteOnMerge = true)
     {
@@ -123,9 +123,9 @@ class Upload
     }
 
     /**
-     * 文件分片保存
+     *Save files in pieces
      *
-     * @return void
+     *@return void
      */
     public function fileUpload()
     {
@@ -157,9 +157,9 @@ class Upload
     }
 
     /**
-     * 文件分片合并
+     *File sharding and merging
      *
-     * @return void
+     *@return void
      */
     private function fileMerge()
     {
@@ -184,7 +184,7 @@ class Upload
                 return;
             }
 
-            //文件分片合并
+            //file fragment merge
             $fsize = filesize($slicename);
             if ($fsize > 0) {
                 $fread = fopen($slicename, 'rb');
@@ -193,7 +193,7 @@ class Upload
                 unset($fread);
             }
 
-            //文件分片删除
+            //File fragment deletion
             if ($this->deleteOnMerge) {
                 @unlink($slicename);
             }
@@ -205,9 +205,9 @@ class Upload
     }
 
     /**
-     * 返回信息
+     *returned messages
      *
-     * @return array
+     *@return array
      */
     public function message()
     {

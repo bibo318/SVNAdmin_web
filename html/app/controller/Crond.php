@@ -1,10 +1,10 @@
 <?php
 /*
- * @Author: bibo318
- * 
- * @LastEditors: bibo318
- * 
- * @Description: github: /bibo318
+ *@Author: bibo318
+ *
+ *@LastEditors: bibo318
+ *
+ *@Description: github: /bibo318
  */
 
 namespace app\controller;
@@ -14,9 +14,9 @@ use app\service\Crond as ServiceCrond;
 class Crond extends Base
 {
     /**
-     * 服务层对象
+     *Service layer object
      *
-     * @var object
+     *@var object
      */
     private $ServiceCrond;
 
@@ -28,9 +28,9 @@ class Crond extends Base
     }
 
     /**
-     * 获取特殊结构的下拉列表
+     *Get the drop-down list of special structure
      *
-     * @return void
+     *@return void
      */
     public function GetRepList()
     {
@@ -39,9 +39,9 @@ class Crond extends Base
     }
 
     /**
-     * 获取任务计划列表
+     *Get task plan list
      *
-     * @return array
+     *@return array
      */
     public function GetCrontabList()
     {
@@ -50,9 +50,9 @@ class Crond extends Base
     }
 
     /**
-     * 设置任务计划
+     *Set task schedule
      *
-     * @return array
+     *@return array
      */
     public function CreateCrontab()
     {
@@ -61,9 +61,9 @@ class Crond extends Base
     }
 
     /**
-     * 更新任务计划
+     *Update mission plan
      *
-     * @return array
+     *@return array
      */
     public function UpdCrontab()
     {
@@ -72,9 +72,9 @@ class Crond extends Base
     }
 
     /**
-     * 修改任务计划状态
+     *Modify task planning status
      *
-     * @return array
+     *@return array
      */
     public function UpdCrontabStatus()
     {
@@ -83,9 +83,9 @@ class Crond extends Base
     }
 
     /**
-     * 删除任务计划
+     *Delete task plan
      *
-     * @return array
+     *@return array
      */
     public function DelCrontab()
     {
@@ -94,9 +94,9 @@ class Crond extends Base
     }
 
     /**
-     * 获取日志信息
+     *Get log information
      *
-     * @return array
+     *@return array
      */
     public function GetCrontabLog()
     {
@@ -105,9 +105,9 @@ class Crond extends Base
     }
 
     /**
-     * 现在执行任务计划
+     *Now execute task plan
      *
-     * @return array
+     *@return array
      */
     public function TriggerCrontab()
     {
@@ -116,9 +116,9 @@ class Crond extends Base
     }
 
     /**
-     * 检查 crontab at 是否安装和启动
+     *Check if crontab at is installed and started
      *
-     * @return array
+     *@return array
      */
     public function GetCronStatus()
     {

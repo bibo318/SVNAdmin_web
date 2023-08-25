@@ -1,18 +1,18 @@
 <?php
 /*
- * @Author: bibo318
- * 
- * @LastEditors: bibo318
- * 
- * @Description: github: /bibo318
+ *@Tác giả: bibo318
+ *
+ *@LastEditors: bibo318
+ *
+ *@Mô tả: github: /bibo318
  */
 
 /**
- * 安装和升级程序
+ *Cài đặt và nâng cấp chương trình
  */
 
 /**
- * 将工作模式限制在cli模式
+ *Giới hạn chế độ làm việc ở chế độ cli
  */
 if (!preg_match('/cli/i', php_sapi_name())) {
     exit('require php-cli mode');
@@ -60,19 +60,19 @@ class Install
     private $scripts = [
         [
             'index' => 1,
-            'note' => '帮我安装并配置Subversion'
+            'note' => 'Help me install and configure Subversion'
         ],
         [
             'index' => 2,
-            'note' => '按照本系统的要求初始化Subversion（针对以其它方式安装的Subversion）'
+            'note' => 'Initialize Subversion according to the requirements of this system (for Subversion installed in other ways)'
         ],
         [
             'index' => 3,
-            'note' => '检测SVNAdmin的新版本'
+            'note' => 'Detect new version of SVNAdmin'
         ],
         [
             'index' => 4,
-            'note' => '修改当前的数据存储主目录'
+            'note' => 'Modify the current datastore home directory'
         ]
     ];
 
@@ -89,7 +89,7 @@ class Install
     }
 
     /**
-     * 检测SVNAdmin的新版本并选择更新
+     *Phát hiện phiên bản mới của SVNAdmin và chọn cập nhật
      */
     function DetectUpdate()
     {
@@ -98,70 +98,70 @@ class Install
             $result = funCurlRequest(sprintf($value1['url'], $this->configVersion['version']));
 
             if (empty($result)) {
-                echo sprintf('节点[%s]访问超时-切换下一节点%s', $value1['nodeName'], PHP_EOL);
+                echo sprintf('Node [%s] access timed out -switch to next node %s', $value1['nodeName'], PHP_EOL);
                 echo '===============================================' . PHP_EOL;
                 continue;
             }
 
-            //json => array
+            //json => mảng
             $result = json_decode($result, true);
 
             if (!isset($result['code'])) {
-                echo sprintf('节点[%s]返回信息错误-切换下一节点%s', $value1['nodeName'], PHP_EOL);
+                echo sprintf('Node [%s] returned information error -switch to next node %s', $value1['nodeName'], PHP_EOL);
                 echo '===============================================' . PHP_EOL;
                 continue;
             }
 
             if ($result['code'] != 200) {
-                echo sprintf('节点[%s]返回状态码[%s]状态[%s]错误信息[%s]-切换下一节点%s', $value1['nodeName'], $result['status'], $result['message'], $result['code'], PHP_EOL);
+                echo sprintf('Node [%s] returned status code [%s] status [%s] error message [%s] -switch to the next node %s', $value1['nodeName'], $result['status'], $result['message'], $result['code'], PHP_EOL);
                 echo '===============================================' . PHP_EOL;
                 continue;
             }
 
             if (empty($result['data'])) {
-                echo sprintf('当前为最新版[%s]%s', $this->configVersion['version'], PHP_EOL);
+                echo sprintf('Currently the latest version [%s]%s', $this->configVersion['version'], PHP_EOL);
                 echo '===============================================' . PHP_EOL;
                 exit();
             }
 
-            echo sprintf('有新版本[%s]%s', $result['data']['version'], PHP_EOL);
+            echo sprintf('There is a new version [%s]%s', $result['data']['version'], PHP_EOL);
 
-            echo sprintf('修复内容如下:%s', PHP_EOL);
-            foreach ($result['data']['fixd']['con'] as $cons) {
+            echo sprintf('The repair content is as follows: %s', PHP_EOL);
+            foreach ($result['data']['fixed']['con'] as $cons) {
                 echo sprintf('    [%s] %s%s', $cons['title'], $cons['content'], PHP_EOL);
-                // echo '    [' . $cons['title'] . ']' . ' ' . $cons['content'] . PHP_EOL;
+                //echo ' [' . $cons['title'] . ']' . ' ' . $cons['content'] . PHP_EOL;
             }
 
-            echo sprintf('新增内容如下:%s', PHP_EOL);
+            echo sprintf('The new content is as follows: %s', PHP_EOL);
             foreach ($result['data']['add']['con'] as $cons) {
                 echo sprintf('    [%s] %s%s', $cons['title'], $cons['content'], PHP_EOL);
-                // echo '    [' . $cons['title'] . ']' . ' ' . $cons['content'] . PHP_EOL;
+                //echo ' [' . $cons['title'] . ']' . ' ' . $cons['content'] . PHP_EOL;
             }
 
-            echo sprintf('移除内容如下:%s', PHP_EOL);
+            echo sprintf('Remove the content as follows: %s', PHP_EOL);
             foreach ($result['data']['remove']['con'] as $cons) {
                 echo sprintf('    [%s] %s%s', $cons['title'], $cons['content'], PHP_EOL);
-                // echo '    [' . $cons['title'] . ']' . ' ' . $cons['content'] . PHP_EOL;
+                //echo ' [' . $cons['title'] . ']' . ' ' . $cons['content'] . PHP_EOL;
             }
 
-            echo sprintf('确定要升级到[%s]版本吗[y/n]: ', $result['data']['version']);
+            echo sprintf('Are you sure you want to upgrade to [%s] version[y/n]:', $result['data']['version']);
 
             $answer = strtolower(trim(fgets(STDIN)));
 
             if (!in_array($answer, ['y', 'n'])) {
-                echo sprintf('不正确的选项%s', PHP_EOL);
+                echo sprintf('Incorrect option %s', PHP_EOL);
                 echo '===============================================' . PHP_EOL;
                 exit();
             }
 
             if ($answer == 'n') {
-                echo sprintf('已取消%s', PHP_EOL);
+                echo sprintf('%s canceled', PHP_EOL);
                 echo '===============================================' . PHP_EOL;
                 exit();
             }
 
-            //下载并执行升级脚本
-            echo sprintf('开始下载升级包%s', PHP_EOL);
+            //Tải xuống và thực thi tập lệnh nâng cấp
+            echo sprintf('Start downloading upgrade package %s', PHP_EOL);
             echo '===============================================' . PHP_EOL;
             $packages = isset($result['data']['update']['download'][$key1]['packages']) ? $result['data']['update']['download'][$key1]['packages'] : [];
             $forList = array_column($packages, 'for');
@@ -170,7 +170,7 @@ class Install
                 'dest' => $result['data']['version']
             ];
             if (!in_array($current, $forList)) {
-                echo sprintf('没有合适的升级包-请尝试直接手动安装最新版%s', PHP_EOL);
+                echo sprintf('There is no suitable upgrade package -please try to manually install the latest version of %s', PHP_EOL);
                 echo '===============================================' . PHP_EOL;
                 exit();
             }
@@ -178,42 +178,42 @@ class Install
             $update_download_url = $packages[$index]['url'];
             $update_zip = funCurlRequest($update_download_url);
             if ($update_zip == null) {
-                echo sprintf('从节点[%s]下载升级包超时-切换下一节点%s', $value1['nodeName'], PHP_EOL);
+                echo sprintf('Downloading upgrade package from node [%s] timed out -switch to the next node %s', $value1['nodeName'], PHP_EOL);
                 echo '===============================================' . PHP_EOL;
                 continue;
             }
             file_put_contents(BASE_PATH . '/update.zip', $update_zip);
-            echo sprintf('升级包下载完成%s', PHP_EOL);
+            echo sprintf('Upgrade package download completed %s', PHP_EOL);
             echo '===============================================' . PHP_EOL;
 
-            echo sprintf('开始解压升级包[覆盖解压]%s', PHP_EOL);
+            echo sprintf('Start to decompress the upgrade package [overwrite decompression]%s', PHP_EOL);
             echo '===============================================' . PHP_EOL;
             passthru('unzip -o ' . BASE_PATH . '/update.zip');
             if (!is_dir(BASE_PATH . '/update')) {
-                echo sprintf('解压升级包出错-请尝试手动解压并执行升级程序[php update/index.php]%s', PHP_EOL);
+                echo sprintf('Error decompressing the upgrade package -please try to manually decompress and execute the upgrade program [php update/index.php]%s', PHP_EOL);
                 echo '===============================================' . PHP_EOL;
                 exit();
             }
-            echo sprintf('升级包解压完成%s', PHP_EOL);
+            echo sprintf('Upgrade package decompression completed %s', PHP_EOL);
             echo '===============================================' . PHP_EOL;
 
-            echo sprintf('确定要执行升级程序吗[y/n]: ');
+            echo sprintf('Are you sure you want to execute the upgrade program [y/n]: ');
 
             $answer = strtolower(trim(fgets(STDIN)));
 
             if (!in_array($answer, ['y', 'n'])) {
-                echo sprintf('不正确的选项%s', PHP_EOL);
+                echo sprintf('Incorrect option %s', PHP_EOL);
                 echo '===============================================' . PHP_EOL;
                 exit();
             }
 
             if ($answer == 'n') {
-                echo sprintf('已取消%s', PHP_EOL);
+                echo sprintf('%s canceled', PHP_EOL);
                 echo '===============================================' . PHP_EOL;
                 exit();
             }
 
-            echo sprintf('正在执行升级程序%s', PHP_EOL);
+            echo sprintf('Executing upgrade program %s', PHP_EOL);
             echo '===============================================' . PHP_EOL;
 
             passthru('php ' . BASE_PATH . '/update/index.php');
@@ -222,40 +222,40 @@ class Install
 
             echo '===============================================' . PHP_EOL;
 
-            echo sprintf('升级成功-请重启守护进程使部分配置文件生效%s', PHP_EOL);
+            echo sprintf('Upgrade succeeded -please restart the daemon process to make some configuration files take effect %s', PHP_EOL);
             echo '===============================================' . PHP_EOL;
             exit();
         }
     }
 
     /**
-     * 将SVNAdmin加入到开机自启动
+     *Thêm SVNAdmin để tự khởi động boot
      */
     function InitlSVNAdmin()
     {
     }
 
     /**
-     * 将SVNAdmin取消开机自启动
+     *Vô hiệu hóa SVNAdmin khởi động tự động
      */
     function UninitSVNAdmin()
     {
     }
 
     /**
-     * 将SVNAdmin加入监控 如果检测到异常退出则自动重启
+     *Thêm SVNAdmin vào giám sát, nếu phát hiện thoát bất thường sẽ tự động khởi động lại
      */
     function Monitor()
     {
     }
 
     /**
-     * 获取Linux操作系统类型
-     * 
-     * /etc/redhat-release      redhat 或 centos 或 rocky
-     * /etc/debian_version      debian 或 ubuntu
-     * /etc/slackware_version   Slackware
-     * /etc/lsb-release         ubuntu
+     *Nhận loại hệ điều hành Linux
+     *
+     */etc/redhat-release redhat hoặc centos hoặc rock
+     */etc/debian_version debian hoặc ubuntu
+     */etc/slackware_version Phần mềm Slack
+     */etc/lsb-release ubuntu
      */
     private function GetOS()
     {
@@ -265,11 +265,11 @@ class Install
         if (file_exists('/etc/redhat-release')) {
             $readhat_release = file_get_contents('/etc/redhat-release');
             $readhat_release = strtolower($readhat_release);
-            if (strstr($readhat_release, 'centos')) {
+            if (strstr($readhat_release, 'hundreds')) {
                 if (strstr($readhat_release, '8.')) {
-                    return 'centos 8';
+                    return 'hundreds 8';
                 } elseif (strstr($readhat_release, '7.')) {
-                    return 'centos 7';
+                    return 'hundreds 7';
                 } else {
                     return false;
                 }
@@ -286,9 +286,9 @@ class Install
     }
 
     /**
-     * 检测目标路径是否为空
+     *Kiểm tra xem đường dẫn đích có trống không
      *
-     * @return bool
+     *@return bool
      */
     private function IsDirEmpty($path)
     {
@@ -306,46 +306,46 @@ class Install
     }
 
     /**
-     * 修改已经安装的Subversion配置以适合SVNAdmin的管理
+     *Sửa đổi cấu hình Subversion đã cài đặt cho phù hợp với sự quản lý của SVNAdmin
      */
     function ConfigSubversion()
     {
         /**
-         * 1、检测 which 工具是否安装
+         *1. Phát hiện xem công cụ nào đã được cài đặt
          */
         if (trim(shell_exec('which which 2>/dev/null')) == '') {
-            echo '当前环境没有安装 which 工具 不会自动检测软件安装位置！' . PHP_EOL;
+            echo 'The which tool is not installed in the current environment and will not automatically detect the location of the software installation! ' . PHP_EOL;
             echo '===============================================' . PHP_EOL;
         }
 
         echo PHP_EOL . '===============================================' . PHP_EOL;
-        echo '确定要开始配置Subversion程序吗[y/n]：';
+        echo 'Are you sure you want to start configuring the Subversion program [y/n]:';
         $continue = strtolower(trim(fgets(STDIN)));
 
         if (!in_array($continue, ['y', 'n'])) {
-            echo '不正确的选项！'  . PHP_EOL;
+            echo 'Incorrect option! '  . PHP_EOL;
             echo '===============================================' . PHP_EOL;
             exit();
         }
 
         if ($continue == 'n') {
-            echo '已取消！' . PHP_EOL;
+            echo 'Cancelled! ' . PHP_EOL;
             echo '===============================================' . PHP_EOL;
             exit();
         }
 
         /**
-         * 2、检测Subversion的安装情况
+         *2. Phát hiện cài đặt Subversion
          */
-        //检测是否有正在运行的进程
+        //kiểm tra xem có tiến trình nào đang chạy không
         if (shell_exec('ps auxf|grep -v "grep"|grep svnserve') != '') {
-            echo '请先手动停止正在运行的 svnserve 程序后重试！' . PHP_EOL;
+            echo 'Please manually stop the running svnserve program and try again! ' . PHP_EOL;
             echo '===============================================' . PHP_EOL;
             exit();
         }
 
         /**
-         * 3、令用户手动选择配置程序的路径
+         *3. Cho phép người dùng tự chọn đường dẫn của chương trình cấu hình
          */
         $needBin = [
             'svn' => '',
@@ -356,7 +356,7 @@ class Install
             'svnsync' => '',
             'svnrdump' => '',
             'svndumpfilter' => '',
-            'svnmucc' => '',
+            'Savanmukkah' => '',
             'svnauthz-validate' => '',
             'saslauthd' => '',
             'httpd' => '',
@@ -364,38 +364,38 @@ class Install
         ];
 
         echo '===============================================' . PHP_EOL;
-        echo '开始配置Subversion程序！' . PHP_EOL;
+        echo 'Start configuring the Subversion program! ' . PHP_EOL;
         echo '===============================================' . PHP_EOL;
 
         foreach ($needBin as $key => $value) {
-            echo "请输入[$key]程序位置：" . PHP_EOL;
+            echo "please enter[$key] Program location: " . PHP_EOL;
             if ($key == 'svnauthz-validate') {
-                echo 'CentOS 下 svnauthz-validate 的位置通常为 /usr/bin/svn-tools/svnauthz-validate' . PHP_EOL;
+                echo 'The location of svnauthz-validate under CentOS is usually /usr/bin/svn-tools/svnauthz-validate' . PHP_EOL;
             }
-            echo '自动检测到以下程序路径：' . PHP_EOL;
-            passthru("which $key 2>/dev/null");
-            echo '请输入回车使用默认检测路径或手动输入：';
+            echo 'The following program paths were automatically detected:' . PHP_EOL;
+            passthru("which$key2>/dev/null");
+            echo 'Please enter Enter to use the default detection path or enter manually:';
             $binPath = fgets(STDIN);
             if ($binPath == '') {
-                echo '输入不能为空！' . PHP_EOL;
+                echo 'Input can not be empty! ' . PHP_EOL;
                 echo '===============================================' . PHP_EOL;
                 exit();
             }
             if ($binPath == "\n") {
-                $binPath = trim(shell_exec("which $key 2>/dev/null"));
+                $binPath = trim(shell_exec("which$key2>/dev/null"));
                 if ($binPath == '') {
                     if (in_array($key, [
-                        'svnmucc',
+                        'Savanmukkah',
                         'svnauthz-validate',
                         'saslauthd',
                         'httpd',
                         'htpasswd'
                     ])) {
-                        echo "未检测到 $key ，请手动输入程序路径！" . PHP_EOL;
-                        echo "由于 $key 在当前版本非必要，因此无安装可忽略" . PHP_EOL;
+                        echo "Not detected$key, please enter the program path manually! " . PHP_EOL;
+                        echo "because$keyNot necessary in the current version, so no installation can be ignored" . PHP_EOL;
                         echo '===============================================' . PHP_EOL;
                     } else {
-                        echo "未检测到 $key ，请手动输入程序路径！" . PHP_EOL;
+                        echo "Not detected$key, please enter the program path manually! " . PHP_EOL;
                         echo '===============================================' . PHP_EOL;
                         exit();
                     }
@@ -403,13 +403,13 @@ class Install
             } else {
                 $binPath = trim($binPath);
             }
-            echo "$key 程序位置：$binPath" . PHP_EOL;
+            echo "$keyProgram location:$binPath" . PHP_EOL;
             echo '===============================================' . PHP_EOL;
             $needBin[$key] = $binPath;
         }
 
         $binCon = <<<CON
-        <?php
+<?php
         
         return [
             'svn' => '{$needBin['svn']}',
@@ -419,8 +419,8 @@ class Install
             'svnversion' => '{$needBin['svnversion']}',
             'svnsync' => '{$needBin['svnsync']}',
             'svnrdump' => '{$needBin['svnrdump']}',
-            'svndumpfilter' => '{$needBin['svndumpfilter']}',
-            'svnmucc' => '{$needBin['svnmucc']}',
+            'svndumpfilter' => '{$needBin['svndumpfilter']},
+            'svnmucc' => '{$needBin['Savanmukkah']}',
             'svnauthz-validate' => '{$needBin['svnauthz-validate']}',
             'saslauthd' => '{$needBin['saslauthd']}',
             'httpd' => '{$needBin['httpd']}',
@@ -431,153 +431,153 @@ CON;
         file_put_contents(BASE_PATH . '/../config/bin.php', $binCon);
 
         /**
-         * 4、相关文件配置
+         *4. Cấu hình file liên quan
          */
         $templete_path = BASE_PATH . '/../templete/';
 
-        echo '创建相关目录' . PHP_EOL;
+        echo 'Create relative directories' . PHP_EOL;
 
         clearstatcache();
 
-        //创建SVNAdmin软件配置信息的主目录
+        //Tạo thư mục chính chứa thông tin cấu hình phần mềm SVNAdmin
         is_dir($this->configSvn['home_path']) ? '' : mkdir($this->configSvn['home_path'], 0754, true);
 
-        //创建SVN仓库父目录
+        //Tạo thư mục mẹ của kho SVN
         is_dir($this->configSvn['rep_base_path']) ? '' : mkdir($this->configSvn['rep_base_path'], 0754, true);
 
-        //创建推荐钩子目录
+        //Tạo thư mục hook được đề xuất
         is_dir($this->configSvn['recommend_hook_path']) ? '' : mkdir($this->configSvn['recommend_hook_path'], 0754, true);
         shell_exec(sprintf("cp -r '%s' '%s'", $templete_path . 'hooks', $this->configSvn['home_path']));
 
-        //创建备份目录
+        //Tạo thư mục sao lưu
         is_dir($this->configSvn['backup_base_path']) ? '' : mkdir($this->configSvn['backup_base_path'], 0754, true);
 
-        //创建日志目录
+        //Tạo thư mục nhật ký
         is_dir($this->configSvn['log_base_path']) ? '' : mkdir($this->configSvn['log_base_path'], 0754, true);
 
-        //创建仓库结构模板目录
+        //Tạo thư mục mẫu cấu trúc kho
         is_dir($this->configSvn['templete_base_path'] . 'initStruct/01/branches') ? '' : mkdir($this->configSvn['templete_base_path'].'initStruct/01/branches', 0754, true);
         is_dir($this->configSvn['templete_base_path'] . 'initStruct/01/tags') ? '' : mkdir($this->configSvn['templete_base_path'].'initStruct/01/tags', 0754, true);
         is_dir($this->configSvn['templete_base_path'] . 'initStruct/01/trunk') ? '' : mkdir($this->configSvn['templete_base_path'].'initStruct/01/trunk', 0754, true);
 
-        //创建sasl目录
+        //Tạo thư mục sasl
         is_dir($this->configSvn['sasl_home']) ? '' : mkdir($this->configSvn['sasl_home'], 0754, true);
 
-        //创建ldap目录
+        //Tạo thư mục ldap
         is_dir($this->configSvn['ldap_home']) ? '' : mkdir($this->configSvn['ldap_home'], 0754, true);
 
-        //创建crond目录
+        //Tạo thư mục crond
         is_dir($this->configSvn['crond_base_path']) ? '' : mkdir($this->configSvn['crond_base_path'], 0754, true);
 
         echo '===============================================' . PHP_EOL;
 
-        echo '创建相关文件' . PHP_EOL;
+        echo 'Create related files' . PHP_EOL;
 
-        //写入svnserve环境变量文件
+        //Ghi vào tệp biến môi trường svnserve
         $con_svnserve_env_file = file_get_contents($templete_path . 'svnserve/svnserve');
         $con_svnserve_env_file = sprintf($con_svnserve_env_file, $this->configSvn['rep_base_path'], $this->configSvn['svn_conf_file'], $this->configSvn['svnserve_log_file']);
         file_put_contents($this->configSvn['svnserve_env_file'], $con_svnserve_env_file);
 
-        //写入SVN仓库权限配置文件
+        //Viết file cấu hình quyền kho SVN
         $con_svn_conf_file = file_get_contents($templete_path . 'svnserve/svnserve.conf');
         file_put_contents($this->configSvn['svn_conf_file'], $con_svn_conf_file);
 
-        //ldap服务器配置文件
+        //tập tin cấu hình máy chủ ldap
         file_put_contents($this->configSvn['ldap_config_file'], '');
 
-        //写入authz文件
+        //Ghi vào file authz
         $con_svn_authz_file = file_get_contents($templete_path . 'svnserve/authz');
         if (file_exists($this->configSvn['svn_authz_file'])) {
             echo PHP_EOL . '===============================================' . PHP_EOL;
-            echo '要覆盖原有的权限配置文件 authz 吗？[y/n]：';
+            echo 'Do you want to overwrite the original authority configuration file authz? [y/n]:';
             $continue = strtolower(trim(fgets(STDIN)));
 
             if (!in_array($continue, ['y', 'n'])) {
-                echo '不正确的选项！'  . PHP_EOL;
+                echo 'Incorrect option! '  . PHP_EOL;
                 echo '===============================================' . PHP_EOL;
                 exit();
             }
 
             if ($continue == 'y') {
-                //备份
+                //hỗ trợ
                 copy($this->configSvn['svn_authz_file'], $this->configSvn['home_path'] . time() . 'authz');
-                //操作
+                //vận hành
                 file_put_contents($this->configSvn['svn_authz_file'], $con_svn_authz_file);
             }
         } else {
             file_put_contents($this->configSvn['svn_authz_file'], $con_svn_authz_file);
         }
 
-        //写入Tập tin httpPasswd
+        //Write file httpPasswd
         if (!file_exists($this->configSvn['http_passwd_file'])) {
             file_put_contents($this->configSvn['http_passwd_file'], '');
         }
 
-        //写入passwd文件
+        //Ghi vào file passwd
         $con_svn_passwd_file = file_get_contents($templete_path . 'svnserve/passwd');
         if (file_exists($this->configSvn['svn_passwd_file'])) {
             echo PHP_EOL . '===============================================' . PHP_EOL;
-            echo 'Bạn có muốn ghi đè lên tệp cấu hình quyền ban đầu passwd không？[y/n]：';
+            echo 'Do you want to overwrite the original permission configuration file passwd？[y/n]：';
             $continue = strtolower(trim(fgets(STDIN)));
 
             if (!in_array($continue, ['y', 'n'])) {
-                echo 'Tùy chọn không chính xác!'  . PHP_EOL;
+                echo 'Option is incorrect!'  . PHP_EOL;
                 echo '===============================================' . PHP_EOL;
                 exit();
             }
 
             if ($continue == 'y') {
-                //备份
+                //hỗ trợ
                 copy($this->configSvn['svn_passwd_file'], $this->configSvn['home_path'] . time() . 'passwd');
-                //操作
+                //vận hành
                 file_put_contents($this->configSvn['svn_passwd_file'], $con_svn_passwd_file);
             }
         } else {
             file_put_contents($this->configSvn['svn_passwd_file'], $con_svn_passwd_file);
         }
 
-        //创建svnserve运行日志文件
+        //Tạo tệp nhật ký hoạt động svnserve
         file_put_contents($this->configSvn['svnserve_log_file'], '');
 
-        //创建pid文件
+        //Tạo tập tin pid
         file_put_contents($this->configSvn['svnserve_pid_file'], '');
 
         echo '===============================================' . PHP_EOL;
 
         /**
-         * 5、关闭selinux 
-         * 包括临时关闭和永久关闭
+         *5. Đóng selinux
+         *Bao gồm việc đóng cửa tạm thời và vĩnh viễn
          */
-        echo '临时关闭并永久关闭seliux' . PHP_EOL;
+        echo 'Temporarily shut down and permanently shut down seliux' . PHP_EOL;
 
-        //临时关闭selinux
+        //Tạm thời đóng selinux
         shell_exec('setenforce 0');
 
-        //永久关闭selinux
+        //Đóng vĩnh viễn selinux
         shell_exec("sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config");
 
         echo '===============================================' . PHP_EOL;
 
         /**
-         * 6、配置SQLite数据库文件
+         *6. Cấu hình file cơ sở dữ liệu SQLite
          */
-        echo 'Định cấu hình và kích hoạt cơ sở dữ liệu SQLite' . PHP_EOL;
+        echo 'Configure and enable SQLite database' . PHP_EOL;
 
         if (file_exists($this->configSvn['home_path'] . 'svnadmin.db')) {
             echo PHP_EOL . '===============================================' . PHP_EOL;
-            echo 'Bạn có muốn ghi đè lên tệp cơ sở dữ liệu SQLite gốc svnadmin.db không?[y/n]：';
+            echo 'Do you want to overwrite the original SQLite database file svnadmin.db?[y/n]：';
             $continue = strtolower(trim(fgets(STDIN)));
 
             if (!in_array($continue, ['y', 'n'])) {
-                echo 'Tùy chọn không chính xác!'  . PHP_EOL;
+                echo 'Option is incorrect!'  . PHP_EOL;
                 echo '===============================================' . PHP_EOL;
                 exit();
             }
 
             if ($continue == 'y') {
-                //备份
+                //hỗ trợ
                 copy($this->configSvn['home_path'] . 'svnadmin.db', $this->configSvn['home_path'] . time() . 'svnadmin.db');
-                //操作
+                //vận hành
                 copy($templete_path . 'database/sqlite/svnadmin.db', $this->configSvn['home_path'] . 'svnadmin.db');
             }
         } else {
@@ -587,9 +587,9 @@ CON;
         echo '===============================================' . PHP_EOL;
 
         /**
-         * 8、将svnserve注册为系统服务
+         *8. Đăng ký svnserve làm dịch vụ hệ thống
          */
-        echo '清理之前注册的svnserve服务' . PHP_EOL;
+        echo 'Clean up the previously registered svnserve service' . PHP_EOL;
 
         passthru('systemctl stop svnserve.service');
         passthru('systemctl disable svnserve.service');
@@ -597,43 +597,43 @@ CON;
 
         echo '===============================================' . PHP_EOL;
 
-        echo '注册新的svnserve服务' . PHP_EOL;
+        echo 'Register new svnserve service' . PHP_EOL;
 
         $os = $this->GetOS();
         $con_svnserve_service_file = file_get_contents($templete_path . 'svnserve/svnserve.service');
         $con_svnserve_service_file = sprintf($con_svnserve_service_file, $this->configSvn['svnserve_env_file'], $needBin['svnserve'], $this->configSvn['svnserve_pid_file']);
-        if ($os == 'centos 7' || $os == 'centos 8') {
-            file_put_contents($this->configSvn['svnserve_service_file']['centos'], $con_svnserve_service_file);
+        if ($os == 'hundreds 7' || $os == 'hundreds 8') {
+            file_put_contents($this->configSvn['svnserve_service_file']['hundreds'], $con_svnserve_service_file);
         } elseif ($os == 'ubuntu') {
             file_put_contents($this->configSvn['svnserve_service_file']['ubuntu'], $con_svnserve_service_file);
         } elseif ($os == 'rocky') {
-            file_put_contents($this->configSvn['svnserve_service_file']['centos'], $con_svnserve_service_file);
+            file_put_contents($this->configSvn['svnserve_service_file']['hundreds'], $con_svnserve_service_file);
         } else {
-            file_put_contents($this->configSvn['svnserve_service_file']['centos'], $con_svnserve_service_file);
+            file_put_contents($this->configSvn['svnserve_service_file']['hundreds'], $con_svnserve_service_file);
             echo '===============================================' . PHP_EOL;
-            echo '警告！当前操作系统版本未测试，使用过程中可能会遇到问题！' . PHP_EOL;
+            echo 'warn! The current operating system version has not been tested, and you may encounter problems during use! ' . PHP_EOL;
             echo '===============================================' . PHP_EOL;
         }
 
         echo '===============================================' . PHP_EOL;
 
-        //启动
-        echo '开始启动svnserve服务' . PHP_EOL;
+        //khởi động
+        echo 'Start the svnserve service' . PHP_EOL;
 
         passthru('systemctl daemon-reload');
         passthru('systemctl start svnserve');
 
         echo '===============================================' . PHP_EOL;
 
-        //开机自启动
-        echo '将svnserve服务加入到开机自启动' . PHP_EOL;
+        //Khởi động tự động khi khởi động
+        echo 'Add svnserve service to boot self-start' . PHP_EOL;
 
         passthru('systemctl enable svnserve');
 
         echo '===============================================' . PHP_EOL;
 
-        //查看状态
-        echo 'svnserve安装成功，打印运行状态：' . PHP_EOL;
+        //kiểm tra trạng thái
+        echo 'Svnserve installed successfully, print running status:' . PHP_EOL;
 
         passthru('systemctl status svnserve');
 
@@ -641,97 +641,97 @@ CON;
     }
 
     /**
-     * 修改当前的数据存储主目录
+     *Sửa đổi thư mục chính lưu trữ dữ liệu hiện tại
      */
     function MoveHome()
     {
-        //检查是否停止了svnserve
+        //Kiểm tra xem svnserve có bị dừng không
         if (shell_exec('ps auxf|grep -v "grep"|grep svnserve') != '') {
-            echo '请先手动停止正在运行的 svnserve 程序后重试！' . PHP_EOL;
+            echo 'Please manually stop the running svnserve program and try again! ' . PHP_EOL;
             echo '===============================================' . PHP_EOL;
             exit();
         }
 
-        //输入路径
-        echo '请输入目标目录的绝对路径：';
+        //đường dẫn đầu vào
+        echo 'Please enter the absolute path of the target directory:';
         $newHomePath = trim(fgets(STDIN));
         if ($newHomePath == '') {
             echo '===============================================' . PHP_EOL;
-            echo '输入不能为空！' . PHP_EOL;
+            echo 'Input can not be empty! ' . PHP_EOL;
             echo '===============================================' . PHP_EOL;
             exit();
         }
 
-        //检查要修改的目标路径是否存在
+        //Kiểm tra xem đường dẫn đích cần sửa có tồn tại không
         clearstatcache();
         if (!is_dir($newHomePath)) {
             echo '===============================================' . PHP_EOL;
-            echo '目标目录不存在！' . PHP_EOL;
+            echo 'The target directory does not exist! ' . PHP_EOL;
             echo '===============================================' . PHP_EOL;
             exit();
         }
 
-        //路径是否相同
+        //Đường dẫn có giống nhau không
         if ($newHomePath == $this->configSvn['home_path']) {
             echo '===============================================' . PHP_EOL;
-            echo '路径无变化！'  . PHP_EOL;
+            echo 'No change in path! '  . PHP_EOL;
             echo '===============================================' . PHP_EOL;
             exit();
         }
 
-        //检查目标路径是否为空
+        //Kiểm tra xem đường dẫn đích có trống không
         if (!$this->IsDirEmpty($newHomePath)) {
             echo '===============================================' . PHP_EOL;
-            echo '目标目录需要为空！' . PHP_EOL;
+            echo 'The target directory needs to be empty! ' . PHP_EOL;
             echo '===============================================' . PHP_EOL;
             exit();
         }
 
         echo '===============================================' . PHP_EOL;
-        echo '提醒！该步骤适用于您之前执行过 [1] 或 [2] 步骤进行过初始化配置的情况' . PHP_EOL;
+        echo 'remind! This step applies to the situation where you have performed [1] or [2] steps for initial configuration' . PHP_EOL;
 
         echo '===============================================' . PHP_EOL;
-        echo '提醒！不建议将数据存储主目录移动到 root 目录下，因为这会导致读取权限出现问题（除非将 root 目录设置 777 ，但是也不是好主意）' . PHP_EOL;
+        echo 'remind! It is not recommended to move the datastore home directory to the root directory, as this will cause problems with read permissions (unless the root directory is set to 777 , but this is not a good idea either)' . PHP_EOL;
 
-        //对输入的路径规范化，如果末尾没有带有 / 则自动补全
+        //Bình thường hóa đường dẫn đầu vào, nếu không có /ở cuối sẽ tự động hoàn thành
         if (substr($newHomePath, -1) != '/') {
             $newHomePath .= '/';
         }
 
-        //再次确认
+        //xác nhận hai lần
         echo '===============================================' . PHP_EOL;
-        echo sprintf('将数据存储主目录从 %s 修改为 %s', $this->configSvn['home_path'], $newHomePath) . PHP_EOL;
+        echo sprintf('Modify datastore home directory from %s to %s', $this->configSvn['home_path'], $newHomePath) . PHP_EOL;
         echo '===============================================' . PHP_EOL;
-        echo '确定要继续操作吗[y/n]：';
+        echo 'Are you sure you want to continue [y/n]:';
         $continue = strtolower(trim(fgets(STDIN)));
         echo '===============================================' . PHP_EOL;
 
         if (!in_array($continue, ['y', 'n'])) {
-            echo '不正确的选项！'  . PHP_EOL;
+            echo 'Incorrect option! '  . PHP_EOL;
             echo '===============================================' . PHP_EOL;
             exit();
         }
 
         if ($continue == 'n') {
-            echo '已取消！' . PHP_EOL;
+            echo 'Cancelled! ' . PHP_EOL;
             echo '===============================================' . PHP_EOL;
             exit();
         }
 
-        //旧内容
+        //nội dung cũ
         $oldConfigSvn = $this->configSvn;
 
-        //修改配置文件 svn.php
+        //Sửa file cấu hình svn.php
         $con = file_get_contents(BASE_PATH . '/../config/svn.php');
         $con  = preg_replace("/\\\$home[\s]*=[\s]*(['\"])(.*)\\1[;]/", sprintf("\$home = '%s';", $newHomePath), $con);
-        //判断是否匹配成功
+        //Xác định trận đấu có thành công hay không
         file_put_contents(BASE_PATH . '/../config/svn.php', $con);
 
-        //新内容
+        //Nội dung mới
         $newConfigSvn = Config::get('svn');
 
-        //修改svnserve文件中的仓库路径、配置文件路径、日志文件路径
-        echo '修改svnserve环境变量文件' . PHP_EOL;
+        //Sửa đổi đường dẫn kho, đường dẫn tệp cấu hình và đường dẫn tệp nhật ký trong tệp svnserve
+        echo 'Modify the svnserve environment variable file' . PHP_EOL;
 
         $templete_path = BASE_PATH . '/../templete/';
         $con_svnserve_env_file = file_get_contents($templete_path . 'svnserve/svnserve');
@@ -740,14 +740,14 @@ CON;
 
         echo '===============================================' . PHP_EOL;
 
-        //开始移动主目录
-        echo '开始移动主目录' . PHP_EOL;
+        //Bắt đầu di chuyển thư mục chính
+        echo 'Start moving home directory' . PHP_EOL;
 
-        passthru(sprintf("mv %s* %s", $oldConfigSvn['home_path'], $newConfigSvn['home_path']));
+        passthru(sprintf("mv %s*%s", $oldConfigSvn['home_path'], $newConfigSvn['home_path']));
 
         echo '===============================================' . PHP_EOL;
 
-        echo '清理之前注册的svnserve服务' . PHP_EOL;
+        echo 'Clean up the previously registered svnserve service' . PHP_EOL;
 
         passthru('systemctl stop svnserve.service');
         passthru('systemctl disable svnserve.service');
@@ -755,60 +755,60 @@ CON;
 
         echo '===============================================' . PHP_EOL;
 
-        echo '注册新的svnserve服务' . PHP_EOL;
+        echo 'Register new svnserve service' . PHP_EOL;
 
         $os = $this->GetOS();
         $con_svnserve_service_file = file_get_contents($templete_path . 'svnserve/svnserve.service');
         $con_svnserve_service_file = sprintf($con_svnserve_service_file, $newConfigSvn['svnserve_env_file'], $this->configBin['svnserve'], $newConfigSvn['svnserve_pid_file']);
-        if ($os == 'centos 7' || $os == 'centos 8') {
-            file_put_contents($newConfigSvn['svnserve_service_file']['centos'], $con_svnserve_service_file);
+        if ($os == 'hundreds 7' || $os == 'hundreds 8') {
+            file_put_contents($newConfigSvn['svnserve_service_file']['hundreds'], $con_svnserve_service_file);
         } elseif ($os == 'ubuntu') {
             file_put_contents($newConfigSvn['svnserve_service_file']['ubuntu'], $con_svnserve_service_file);
         } elseif ($os == 'rocky') {
-            file_put_contents($newConfigSvn['svnserve_service_file']['centos'], $con_svnserve_service_file);
+            file_put_contents($newConfigSvn['svnserve_service_file']['hundreds'], $con_svnserve_service_file);
         } else {
-            file_put_contents($newConfigSvn['svnserve_service_file']['centos'], $con_svnserve_service_file);
+            file_put_contents($newConfigSvn['svnserve_service_file']['hundreds'], $con_svnserve_service_file);
             echo '===============================================' . PHP_EOL;
-            echo '警告！当前操作系统版本未测试，使用过程中可能会遇到问题！' . PHP_EOL;
+            echo 'warn! The current operating system version has not been tested, and you may encounter problems during use! ' . PHP_EOL;
             echo '===============================================' . PHP_EOL;
         }
 
         echo '===============================================' . PHP_EOL;
 
-        //启动
-        echo '开始启动svnserve服务' . PHP_EOL;
+        //khởi động
+        echo 'Start the svnserve service' . PHP_EOL;
 
         passthru('systemctl daemon-reload');
         passthru('systemctl start svnserve');
 
         echo '===============================================' . PHP_EOL;
 
-        //开机自启动
-        echo '将svnserve服务加入到开机自启动' . PHP_EOL;
+        //Khởi động tự động khi khởi động
+        echo 'Add svnserve service to boot self-start' . PHP_EOL;
 
         passthru('systemctl enable svnserve');
 
         echo '===============================================' . PHP_EOL;
 
-        //查看状态
-        echo 'svnserve重新配置成功，打印运行状态：' . PHP_EOL;
+        //kiểm tra trạng thái
+        echo 'svnserve reconfiguration succeeded, print running status:' . PHP_EOL;
 
         passthru('systemctl status svnserve');
 
         echo '===============================================' . PHP_EOL;
 
-        //重启守护进程
-        echo '请运行 svnadmind.php 程序手动重启后台程序！' . PHP_EOL;
+        //khởi động lại daemon
+        echo 'Please run the svnadmind.php program to manually restart the daemon! ' . PHP_EOL;
 
         passthru('php svnadmind.php stop');
 
         echo '===============================================' . PHP_EOL;
 
-        //sqlite数据库
+        //cơ sở dữ liệu sqlite
     }
 
     /**
-     * 程序入口
+     *Nhập chương trình
      */
     function Run()
     {
@@ -820,40 +820,40 @@ CON;
 
         echo '===============================================' . PHP_EOL;
 
-        echo '请输入命令编号：';
+        echo 'Please enter the command number:';
 
         $answer = trim(fgets(STDIN));
 
         echo '===============================================' . PHP_EOL;
 
         if (!in_array($answer, array_column($this->scripts, 'index'))) {
-            exit('错误的命令编号：' . PHP_EOL);
+            exit('Bad command number:' . PHP_EOL);
         }
 
         if ($answer == 1) {
-            //帮我安装并配置Subversion
+            //Giúp tôi cài đặt và cấu hình Subversion
 
             $shellPath = BASE_PATH . '/../templete/install/WANdisco/';
 
             if (!is_dir($shellPath)) {
-                exit('安装脚本目录不存在！' . PHP_EOL);
+                exit('The install script directory does not exist! ' . PHP_EOL);
             }
 
             $shell = scandir($shellPath);
 
-            echo '| Subversion安装脚本来自 WANdiso' . PHP_EOL;
+            echo '| Subversion installation script from WANdiso' . PHP_EOL;
 
-            echo '| 当前提供的安装脚本不一定适配所有操作系统！如部分的ubuntu和rokcy等' . PHP_EOL;
+            echo '| The currently provided installation scripts may not be suitable for all operating systems! Such as part of ubuntu and rokcy, etc.' . PHP_EOL;
 
-            echo '| 如果当前操作系统平台提供的Subversion版本较低（<1.8）才推荐使用此方法安装Subversion！' . PHP_EOL;
+            echo '| If the Subversion version provided by the current operating system platform is lower (<1.8), it is recommended to use this method to install Subversion! ' . PHP_EOL;
 
-            echo '| 如果由于网络延迟原因安装失败，可手动停止后多尝试几次' . PHP_EOL;
+            echo '| If the installation fails due to network delay, you can manually stop it and try a few more times' . PHP_EOL;
 
-            echo '| 在通过脚本安装Subversion的过程中，请注意信息交互！' . PHP_EOL;
+            echo '| In the process of installing Subversion through the script, please pay attention to the information interaction! ' . PHP_EOL;
 
             echo '===============================================' . PHP_EOL;
 
-            echo '可选择的Subversion版本如下：' . PHP_EOL;
+            echo 'The available Subversion versions are as follows:' . PHP_EOL;
 
             echo '===============================================' . PHP_EOL;
 
@@ -867,26 +867,26 @@ CON;
             }
 
             if ($noShell) {
-                exit('没有可选的安装脚本！' . PHP_EOL);
+                exit('There are no optional install scripts! ' . PHP_EOL);
             }
 
             echo '===============================================' . PHP_EOL;
 
-            echo '请注意SVNAdmin支持管理的Subversion版本为1.8+！' . PHP_EOL;
+            echo 'Please note that the Subversion version supported by SVNAdmin is 1.8+! ' . PHP_EOL;
 
             echo '===============================================' . PHP_EOL;
 
-            echo '请输入要安装的Subversion版本（推荐Subversion-1.10）：';
+            echo 'Please enter the Subversion version to install (Subversion-1.10 is recommended):';
 
             $answer = trim(fgets(STDIN));
 
             echo '===============================================' . PHP_EOL;
 
             if (!file_exists($shellPath . 'subversion_installer_' . $answer . '.sh')) {
-                exit('请选择正确的版本！' . PHP_EOL);
+                exit('Please select the correct version! ' . PHP_EOL);
             }
 
-            echo '现在开始执行脚本：' . 'subversion_installer_' . $answer . '.sh' . PHP_EOL;
+            echo 'Now execute the script:' . 'subversion_installer_' . $answer . '.sh' . PHP_EOL;
 
             echo '===============================================' . PHP_EOL;
 
@@ -894,24 +894,24 @@ CON;
 
             $this->ConfigSubversion();
         } elseif ($answer == 2) {
-            //按照本系统的要求初始化Subversion（针对以其它方式安装的Subversion）
+            //Khởi tạo Subversion theo yêu cầu của hệ thống này (đối với Subversion được cài đặt theo cách khác)
             $this->ConfigSubversion();
         } elseif ($answer == 3) {
-            //检测SVNAdmin的新版本
+            //Phát hiện phiên bản mới của SVNAdmin
             $this->DetectUpdate();
         } elseif ($answer == 4) {
-            //修改当前的数据存储主目录
+            //Sửa đổi thư mục chính lưu trữ dữ liệu hiện tại
             $this->MoveHome();
         }
     }
 }
 
-//检测禁用函数
+//chức năng phát hiện bị vô hiệu hóa
 $require_functions = ['shell_exec', 'passthru'];
 $disable_functions = explode(',', ini_get('disable_functions'));
 foreach ($disable_functions as $disable) {
     if (in_array(trim($disable), $require_functions)) {
-        echo "需要的 $disable 函数被禁用" . PHP_EOL;
+        echo "needs$disablefunction is disabled" . PHP_EOL;
         exit();
     }
 }

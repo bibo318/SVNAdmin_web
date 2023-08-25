@@ -1,10 +1,10 @@
 <?php
 /*
- * @Author: bibo318
- * 
- * @LastEditors: bibo318
- * 
- * @Description: github: /bibo318
+ *@Author: bibo318
+ *
+ *@LastEditors: bibo318
+ *
+ *@Description: github: /bibo318
  */
 
 namespace app\controller;
@@ -14,9 +14,9 @@ use app\service\Svnaliase as ServiceSvnaliase;
 class Svnaliase extends Base
 {
     /**
-     * 服务层对象
+     *Service layer object
      *
-     * @var object
+     *@var object
      */
     private $ServiceSvnaliase;
 
@@ -28,7 +28,7 @@ class Svnaliase extends Base
     }
 
     /**
-     * 获取全部的SVN别名
+     *Get all SVN aliases
      */
     public function GetAliaseList()
     {

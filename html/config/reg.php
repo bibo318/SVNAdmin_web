@@ -1,55 +1,55 @@
 <?php
 /*
- * @Author: bibo318
- * 
- * @LastEditors: bibo318
- * 
- * @Description: github: /bibo318
+ *@Author: bibo318
+ *
+ *@LastEditors: bibo318
+ *
+ *@Description: github: /bibo318
  */
 
 /**
- * 正则匹配规则
+ *Regular matching rules
  */
 
 return [
     /**
-     * 校验SVN仓库名称
-     * 
-     * 1、可以包含中文、字母、数字、下划线、破折号、点
-     * 2、不能以点开头或结尾
+     *Verify the SVN warehouse name
+     *
+     *1. Can contain Chinese characters, letters, numbers, underscores, dashes, dots
+     *2. Cannot start or end with a dot
      */
     'REG_SVN_REP_NAME' => "/^[A-Za-z0-9-_一-龥]+(\.+[A-Za-z0-9-_一-龥]+)*$/",
 
     /**
-     * 校验SVN用户名称
-     * 
-     * 1、可以包含字母、数字、下划线、破折号、点
-     * 2、字符串中包含空格的情况不会被匹配
+     *Verify SVN user name
+     *
+     *1. Can contain letters, numbers, underscores, dashes, dots
+     *2. If the string contains spaces, it will not be matched
      */
     'REG_SVN_USER_NAME' => "/^[A-Za-z0-9-_.一-龥]+$/",
 
     /**
-     * 校验SVN用户组名称
-     * 
-     * 1、可以包含字母、数字、下划线、破折号、点
-     * 2、字符串中包含空格的情况不会被匹配
+     *Verify SVN user group name
+     *
+     *1. Can contain letters, numbers, underscores, dashes, dots
+     *2. If the string contains spaces, it will not be matched
      */
     'REG_SVN_GROUP_NAME' => "/^[A-Za-z0-9-_.一-龥]+$/",
 
     /**
-     * 邮箱格式校验
+     *Mailbox format verification
      */
     'REG_MAIL' => "/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/",
 
     /**
-     * 自定义配置文件读取
-     * 
-     * %s => $key
+     *Custom configuration file read
+     *
+     *%s => $key
      */
     'REG_CONFIG' => "/define\(\"*'*%s'*\"*\s*,\s*'*(.*?)'*\)/",
 
     /**
-     * 匹配subversion版本号
+     *Match subversion version number
      */
     'REG_SUBVERSION_VERSION' => "/svnserve.*?\b([0-9.]+)\b/m",
 ];

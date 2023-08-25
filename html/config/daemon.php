@@ -1,28 +1,28 @@
 <?php
 /*
- * @Author: bibo318
- * 
- * @LastEditors: bibo318
- * 
- * @Description: github: /bibo318
+ *@Author: bibo318
+ *
+ *@LastEditors: bibo318
+ *
+ *@Description: github: /bibo318
  */
 
 /**
- * 修改该配置文件后需要重启守护进程程序(svnadmind.php)
+ *After modifying the configuration file, you need to restart the daemon program (svnadmind.php)
  */
 
 return [
     /**
-     * socket_read 和 socket_write 的最大传输字节(B)
-     * 
-     * 默认值 500 KB
-     * 
-     * 1MB = 1024KB = 1024*1024B
+     *The maximum transfer byte (B) of socket_read and socket_write
+     *
+     *Default value 500KB
+     *
+     *1MB = 1024KB = 1024*1024B
      */
     'socket_data_length' => 500 * 1024,
 
     /**
-     * socket 处理并发的最大队列长度
+     *The socket handles the maximum queue length concurrently
      */
     'socket_listen_backlog' => 2000,
 ];

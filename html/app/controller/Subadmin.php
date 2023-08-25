@@ -1,10 +1,10 @@
 <?php
 /*
- * @Author: bibo318
- * 
- * @LastEditors: bibo318
- * 
- * @Description: github: /bibo318
+ *@Author: bibo318
+ *
+ *@LastEditors: bibo318
+ *
+ *@Description: github: /bibo318
  */
 
 namespace app\controller;
@@ -14,9 +14,9 @@ use app\service\Subadmin as ServiceSubadmin;
 class Subadmin extends Base
 {
     /**
-     * 服务层对象
+     *Service layer object
      *
-     * @var object
+     *@var object
      */
     private $ServiceSubadmin;
 
@@ -28,9 +28,9 @@ class Subadmin extends Base
     }
 
     /**
-     * 获取子管理员列表
+     *Get the list of sub-administrators
      *
-     * @return void
+     *@return void
      */
     public function GetSubadminList()
     {
@@ -39,9 +39,9 @@ class Subadmin extends Base
     }
 
     /**
-     * 创建子管理员
+     *Create sub-administrators
      *
-     * @return void
+     *@return void
      */
     public function CreateSubadmin()
     {
@@ -50,9 +50,9 @@ class Subadmin extends Base
     }
 
     /**
-     * 删除子管理员
+     *Delete sub-admin
      *
-     * @return void
+     *@return void
      */
     public function DelSubadmin()
     {
@@ -61,9 +61,9 @@ class Subadmin extends Base
     }
 
     /**
-     * 重置子管理员密码
+     *Reset sub-administrator password
      *
-     * @return void
+     *@return void
      */
     public function UpdSubadminPass()
     {
@@ -72,9 +72,9 @@ class Subadmin extends Base
     }
 
     /**
-     * 修改子管理员启用状态
+     *Modify the enabled status of the sub-administrator
      *
-     * @return void
+     *@return void
      */
     public function UpdSubadminStatus()
     {
@@ -83,9 +83,9 @@ class Subadmin extends Base
     }
 
     /**
-     * 修改子管理员备注信息
+     *Modify sub-administrator remarks
      *
-     * @return void
+     *@return void
      */
     public function UpdSubadminNote()
     {
@@ -94,7 +94,7 @@ class Subadmin extends Base
     }
 
     /**
-     * 获取某个子管理员的权限树
+     *Get the permission tree of a sub-administrator
      */
     public function GetSubadminTree()
     {
@@ -103,7 +103,7 @@ class Subadmin extends Base
     }
 
     /**
-     * 修改某个子管理员的权限树
+     *Modify the permission tree of a sub-administrator
      */
     public function UpdSubadminTree()
     {

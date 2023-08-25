@@ -1,24 +1,24 @@
 <?php
 /*
- * @Author: bibo318
- * 
- * @LastEditors: bibo318
- * 
- * @Description: github: /bibo318
+ *@Author: bibo318
+ *
+ *@LastEditors: bibo318
+ *
+ *@Description: github: /bibo318
  */
 
 /**
- * 将工作模式限制在cli模式
+ *Limit the working mode to cli mode
  */
 if (!preg_match('/cli/i', php_sapi_name())) {
     exit('require php-cli mode' . PHP_EOL);
 }
 
 /**
- * 开启错误信息 如需要调试 可取消注释
+ *Turn on the error message, if you need to debug, you can uncomment it
  */
-// ini_set('display_errors', '1');
-// error_reporting(E_ALL);
+//ini_set('display_errors', '1');
+//error_reporting(E_ALL);
 
 define('BASE_PATH', __DIR__ . '/..');
 
@@ -53,7 +53,7 @@ class Daemon
     }
 
     /**
-     * 创建TCP套接字并监听指定端口
+     *Create a TCP socket and listen to the specified port
      */
     private function InitSocket()
     {
@@ -61,19 +61,19 @@ class Daemon
             unlink(IPC_SVNADMIN);
         }
 
-        //创建套接字
+        //create socket
         $socket = @socket_create(AF_UNIX, SOCK_STREAM, 0) or die(sprintf('Không tạo được ổ cắm[%s]%s', socket_strerror(socket_last_error()), PHP_EOL));
 
-        //绑定地址和端口
+        //bind address and port
         @socket_bind($socket, IPC_SVNADMIN, 0) or die(sprintf('绑定失败[%s][%s]%s', socket_strerror(socket_last_error()), IPC_SVNADMIN, PHP_EOL));
 
-        //监听 设置并发队列的最大长度
+        //Listen to set the maximum length of the concurrent queue
         @socket_listen($socket, $this->configDaemon['socket_listen_backlog']) or die(sprintf('giám sát thất bại[%s]%s', socket_strerror(socket_last_error()), PHP_EOL));
 
-        //使其它用户可用
+        //make available to other users
         shell_exec('chmod 777 ' . IPC_SVNADMIN);
 
-        // 创建任务进程 用于处理任务
+        //Create a task process for processing tasks
         $pid = pcntl_fork();
         if ($pid == -1) {
             die(sprintf('pcntl_fork không thành công[%s]%s', socket_strerror(socket_last_error()), PHP_EOL));
@@ -89,12 +89,12 @@ class Daemon
         }
 
         while (true) {
-            //非阻塞式回收僵尸进程
+            //Non-blocking recycling zombie process
             pcntl_wait($status, WNOHANG);
 
             $client = @socket_accept($socket) or die(sprintf('Nhận kết nối không thành công[%s]%s', socket_strerror(socket_last_error()), PHP_EOL));
 
-            //非阻塞式回收僵尸进程
+            //Non-blocking recycling zombie process
             pcntl_wait($status, WNOHANG);
 
             $pid = pcntl_fork();
@@ -108,9 +108,9 @@ class Daemon
     }
 
     /**
-     * 清理垃圾任务
+     *Clean up junk tasks
      *
-     * @return void
+     *@return void
      */
     private function ClearTask()
     {
@@ -185,7 +185,7 @@ class Daemon
     }
 
     /**
-     * 处理任务
+     *Handle tasks
      */
     private function HandleTask()
     {
@@ -221,7 +221,7 @@ class Daemon
         ]);
 
         foreach ($tasks as $task) {
-            //开始执行
+            //Begin execution
             $database->update('tasks', [
                 'task_status' => 2
             ], [
@@ -242,7 +242,7 @@ class Daemon
             file_put_contents($task_error_log_file, $buffer, FILE_APPEND);
             file_put_contents($task['task_log_file'], $buffer, FILE_APPEND);
 
-            //执行结束
+            //End of execution
             $database->update('tasks', [
                 'task_status' => 3,
                 'task_update_time' => date('Y-m-d H:i:s')
@@ -255,13 +255,13 @@ class Daemon
     }
 
     /**
-     * 接收TCP连接并处理指令
+     *Receive TCP connection and process instructions
      */
     private function HandleRequest($client)
     {
         $length = $this->configDaemon['socket_data_length'];
 
-        //接收客户端发送的数据
+        //Receive the data sent by the client
         if (empty($receive = socket_read($client, $length))) {
             exit();
         }
@@ -275,24 +275,24 @@ class Daemon
         $type = $receive['type'];
         $content = $receive['content'];
 
-        //console模式
+        //console mode
         if ($this->workMode == 'console') {
             echo PHP_EOL . '---------receive---------' . PHP_EOL;
             print_r($receive);
         }
 
         if ($type == 'passthru') {
-            //定义错误输出文件路径
+            //Define error output file path
             $stderrFile = tempnam(sys_get_temp_dir(), 'svnadmin_');
 
-            //将标准错误重定向到文件
-            //使用状态码来标识错误信息
+            //redirect standard error to a file
+            //Use the status code to identify the error message
             ob_start();
             passthru($content . " 2>$stderrFile", $code);
             $buffer = ob_get_contents();
             ob_end_clean();
 
-            //将错误信息和正确信息分类收集
+            //Categorize and collect error information and correct information
             $result = [
                 'code' => $code,
                 'result' => trim($buffer),
@@ -308,7 +308,7 @@ class Daemon
             ];
         }
 
-        //console模式
+        //console mode
         if ($this->workMode == 'console') {
             echo PHP_EOL . '---------result---------' . PHP_EOL;
             echo 'code: ' . $result['code'] . PHP_EOL;
@@ -316,18 +316,18 @@ class Daemon
             echo 'error: ' . $result['error'] . PHP_EOL;
         }
 
-        //返回json格式
+        //return json format
         @socket_write($client, json_encode($result), $length) or die(sprintf('socket_write không thành công[%s]%s', socket_strerror(socket_last_error()), PHP_EOL));
 
-        //关闭会话
+        //Close the session
         socket_close($client);
 
-        //退出进程
+        //exit the process
         exit();
     }
 
     /**
-     * 检查操作系统是否符合要求
+     *Check if the operating system meets the requirements
      */
     private function CheckSysType()
     {
@@ -339,23 +339,23 @@ class Daemon
             $readhat_release = strtolower($readhat_release);
             if (strstr($readhat_release, 'centos')) {
                 if (strstr($readhat_release, '8.')) {
-                    // return 'centos 8';
+                    //return 'centos 8';
                 } elseif (strstr($readhat_release, '7.')) {
-                    // return 'centos 7';
+                    //return 'centos 7';
                 } else {
                     echo '===============================================' . PHP_EOL;
                     echo 'cảnh báo! Phiên bản hệ điều hành hiện tại chưa được thử nghiệm và bạn có thể gặp sự cố trong quá trình sử dụng!' . PHP_EOL;
                     echo '===============================================' . PHP_EOL;
                 }
             } elseif (strstr($readhat_release, 'rocky')) {
-                // return 'rocky';
+                //return 'rocky';
             } else {
                 echo '===============================================' . PHP_EOL;
                 echo 'cảnh báo! Phiên bản hệ điều hành hiện tại chưa được thử nghiệm và bạn có thể gặp sự cố trong quá trình sử dụng!' . PHP_EOL;
                 echo '===============================================' . PHP_EOL;
             }
         } elseif (file_exists('/etc/lsb-release')) {
-            // return 'ubuntu';
+            //return 'ubuntu';
         } else {
             echo '===============================================' . PHP_EOL;
             echo 'cảnh báo! Phiên bản hệ điều hành hiện tại chưa được thử nghiệm và bạn có thể gặp sự cố trong quá trình sử dụng!' . PHP_EOL;
@@ -364,7 +364,7 @@ class Daemon
     }
 
     /**
-     * 检查php版本是否符合要求
+     *Check if the php version meets the requirements
      */
     private function CheckPhpVersion()
     {
@@ -382,7 +382,7 @@ class Daemon
     }
 
     /**
-     * 检查cli模式需要的函数是否被禁用
+     *Check if functions required by cli mode are disabled
      */
     private function CheckDisabledFun()
     {
@@ -396,7 +396,7 @@ class Daemon
     }
 
     /**
-     * 更新密钥
+     *update key
      */
     private function UpdateSign()
     {
@@ -413,7 +413,7 @@ class Daemon
     }
 
     /**
-     * 停止
+     *stop
      */
     private function Stop()
     {
@@ -431,7 +431,7 @@ class Daemon
             @unlink($this->taskPidFile);
         }
 
-        //如果为 Linux 平台，且安装了 ps 程序，检测是否正确关闭了相关程序
+        //If it is a Linux platform and the ps program is installed, check whether the relevant program is closed correctly
         if (PHP_OS == 'Linux') {
             $result = shell_exec('which ps 2>/dev/null');
             if (!empty($result)) {
@@ -446,7 +446,7 @@ class Daemon
     }
 
     /**
-     * 启动
+     *start up
      */
     private function Start()
     {
@@ -475,7 +475,7 @@ class Daemon
     }
 
     /**
-     * 调试
+     *debug
      */
     private function Console()
     {

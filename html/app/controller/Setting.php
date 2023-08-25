@@ -1,10 +1,10 @@
 <?php
 /*
- * @Author: bibo318
- * 
- * @LastEditors: bibo318
- * 
- * @Description: github: /bibo318
+ *@Author: bibo318
+ *
+ *@LastEditors: bibo318
+ *
+ *@Description: github: /bibo318
  */
 
 namespace app\controller;
@@ -18,9 +18,9 @@ use app\service\Apache as ServiceApache;
 class Setting extends Base
 {
     /**
-     * 服务层对象
+     *Service layer object
      *
-     * @var object
+     *@var object
      */
     private $ServiceSetting;
     private $ServiceMail;
@@ -40,9 +40,9 @@ class Setting extends Base
     }
 
     /**
-     * 获取宿主机配置
+     *Get host configuration
      *
-     * @return array
+     *@return array
      */
     public function GetDcokerHostInfo()
     {
@@ -51,7 +51,7 @@ class Setting extends Base
     }
 
     /**
-     * 修改宿主机配置
+     *Modify the host configuration
      */
     public function UpdDockerHostInfo()
     {
@@ -60,7 +60,7 @@ class Setting extends Base
     }
 
     /**
-     * 获取 svnserve 的详细信息
+     *Get svnserve details
      */
     public function GetSvnInfo()
     {
@@ -69,7 +69,7 @@ class Setting extends Base
     }
 
     /**
-     * 保存 svnserve 相关配置
+     *Save svnserve related configuration
      */
     public function UpdSvnUsersource()
     {
@@ -78,7 +78,7 @@ class Setting extends Base
     }
 
     /**
-     * 启动SVN
+     *Start SVN
      */
     public function UpdSvnserveStatusStart()
     {
@@ -87,7 +87,7 @@ class Setting extends Base
     }
 
     /**
-     * 停止SVN
+     *Stop SVN
      */
     public function UpdSvnserveStatusStop()
     {
@@ -96,7 +96,7 @@ class Setting extends Base
     }
 
     /**
-     * 修改 svnserve 监听端口
+     *Modify svnserve listening port
      */
     public function UpdSvnservePort()
     {
@@ -105,7 +105,7 @@ class Setting extends Base
     }
 
     /**
-     * 修改 svnserve 的监听主机
+     *Modify the listening host of svnserve
      */
     public function UpdSvnserveHost()
     {
@@ -114,7 +114,7 @@ class Setting extends Base
     }
 
     /**
-     * 获取配置文件列表
+     *Get a list of configuration files
      */
     public function GetDirInfo()
     {
@@ -123,7 +123,7 @@ class Setting extends Base
     }
 
     /**
-     * 检测新版本
+     *Detect new version
      */
     public function CheckUpdate()
     {
@@ -132,7 +132,7 @@ class Setting extends Base
     }
 
     /**
-     * 获取邮件配置信息
+     *Get mail configuration information
      */
     public function GetMailInfo()
     {
@@ -141,7 +141,7 @@ class Setting extends Base
     }
 
     /**
-     * 发送测试邮件
+     *Send test email
      */
     public function SendMailTest()
     {
@@ -150,7 +150,7 @@ class Setting extends Base
     }
 
     /**
-     * 修改邮件配置信息
+     *Modify mail configuration information
      */
     public function UpdMailInfo()
     {
@@ -159,7 +159,7 @@ class Setting extends Base
     }
 
     /**
-     * 获取消息推送信息配置
+     *Get message push information configuration
      */
     public function GetMailPushInfo()
     {
@@ -168,9 +168,9 @@ class Setting extends Base
     }
 
     /**
-     * 获取安全配置选项
+     *Get security configuration options
      *
-     * @return array
+     *@return array
      */
     public function GetSafeInfo()
     {
@@ -179,9 +179,9 @@ class Setting extends Base
     }
 
     /**
-     * 设置安全配置选项
+     *Set security configuration options
      *
-     * @return array
+     *@return array
      */
     public function UpdSafeInfo()
     {
@@ -190,7 +190,7 @@ class Setting extends Base
     }
 
     /**
-     * 修改推送选项
+     *Modify push options
      */
     function UpdPushInfo()
     {
@@ -199,9 +199,9 @@ class Setting extends Base
     }
 
     /**
-     * Nhận tùy chọn mã xác minh đăng nhập
+     *Get login verification code option
      *
-     * @return array
+     *@return array
      */
     public function GetVerifyOption()
     {
@@ -210,9 +210,9 @@ class Setting extends Base
     }
 
     /**
-     * 测试连接ldap服务器
+     *Test connection to ldap server
      *
-     * @return array
+     *@return array
      */
     public function LdapTest()
     {
@@ -221,9 +221,9 @@ class Setting extends Base
     }
 
     /**
-     * 开启 saslauthd 服务
+     *Start the saslauthd service
      *
-     * @return void
+     *@return void
      */
     public function UpdSaslStatusStart()
     {
@@ -232,9 +232,9 @@ class Setting extends Base
     }
 
     /**
-     * 关闭 saslauthd 服务
+     *Close the saslauthd service
      *
-     * @return void
+     *@return void
      */
     public function UpdSaslStatusStop()
     {
@@ -243,9 +243,9 @@ class Setting extends Base
     }
 
     /**
-     * 获取 apache 服务器信息
+     *Get apache server information
      *
-     * @return void
+     *@return void
      */
     public function GetApacheInfo()
     {
@@ -254,9 +254,9 @@ class Setting extends Base
     }
 
     /**
-     * 启用 http 协议检出
+     *Enable http protocol checkout
      *
-     * @return void
+     *@return void
      */
     public function UpdSubversionEnable()
     {
@@ -265,9 +265,9 @@ class Setting extends Base
     }
 
     /**
-     * 启用 svn 协议检出
+     *Enable svn protocol checkout
      *
-     * @return void
+     *@return void
      */
     public function UpdSvnEnable()
     {
@@ -276,9 +276,9 @@ class Setting extends Base
     }
 
     /**
-     * 修改 http 协议访问前缀
+     *Modify the http protocol access prefix
      *
-     * @return void
+     *@return void
      */
     public function UpdHttpPrefix()
     {
@@ -287,9 +287,9 @@ class Setting extends Base
     }
 
     /**
-     * 修改 http 协议显示端口
+     *Modify http protocol display port
      *
-     * @return void
+     *@return void
      */
     public function UpdHttpPort()
     {
@@ -298,7 +298,7 @@ class Setting extends Base
     }
 
     /**
-     * 保存 apache 相关配置
+     *Save apache related configuration
      */
     public function UpdHttpUsersource()
     {

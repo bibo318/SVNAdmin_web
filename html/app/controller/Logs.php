@@ -1,10 +1,10 @@
 <?php
 /*
- * @Author: bibo318
- * 
- * @LastEditors: bibo318
- * 
- * @Description: github: /bibo318
+ *@Author: bibo318
+ *
+ *@LastEditors: bibo318
+ *
+ *@Description: github: /bibo318
  */
 
 namespace app\controller;
@@ -14,9 +14,9 @@ use app\service\Logs as ServiceLogs;
 class Logs extends Base
 {
     /**
-     * 服务层对象
+     *Service layer object
      *
-     * @var object
+     *@var object
      */
     private $ServiceLogs;
 
@@ -28,7 +28,7 @@ class Logs extends Base
     }
 
     /**
-     * 获取日志列表
+     *Get log list
      */
     public function GetLogList()
     {
@@ -37,7 +37,7 @@ class Logs extends Base
     }
 
     /**
-     * 清空日志
+     *clear log
      */
     public function DelLogs()
     {

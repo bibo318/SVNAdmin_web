@@ -1,10 +1,10 @@
 <?php
 /*
- * @Author: bibo318
- * 
- * @LastEditors: bibo318
- * 
- * @Description: github: /bibo318
+ *@Author: bibo318
+ *
+ *@LastEditors: bibo318
+ *
+ *@Description: github: /bibo318
  */
 
 namespace app\controller;
@@ -14,9 +14,9 @@ use app\service\Secondpri as ServiceSecondpri;
 class Secondpri extends Base
 {
     /**
-     * 服务层对象
+     *Service layer object
      *
-     * @var object
+     *@var object
      */
     private $ServiceSecondpri;
 
@@ -28,9 +28,9 @@ class Secondpri extends Base
     }
 
     /**
-     * 设置二次授权状态
+     *Set the secondary authorization status
      *
-     * @return void
+     *@return void
      */
     public function UpdSecondpri()
     {
@@ -39,9 +39,9 @@ class Secondpri extends Base
     }
 
     /**
-     * 获取二次授权可管理对象
+     *Obtain secondary authorization manageable objects
      *
-     * @return void
+     *@return void
      */
     public function GetSecondpriObjectList()
     {
@@ -50,9 +50,9 @@ class Secondpri extends Base
     }
 
     /**
-     * 添加二次授权可管理对象
+     *Add secondary authorization manageable objects
      *
-     * @return void
+     *@return void
      */
     public function CreateSecondpriObject()
     {
@@ -61,9 +61,9 @@ class Secondpri extends Base
     }
 
     /**
-     * 删除二次授权可管理对象
+     *Delete secondary authorization manageable objects
      *
-     * @return void
+     *@return void
      */
     public function DelSecondpriObject()
     {
